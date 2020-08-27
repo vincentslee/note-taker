@@ -14,11 +14,7 @@ var PORT = process.env.PORT || 8080;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-require("./routing/api")(app);
-require("./routing/html")(app);
-
-
+app.use(express.static(path.join(__dirname, 'public')));
 // Start our server so that it can begin listening to client requests.
 /* server.listen(PORT, function() {
 
@@ -40,18 +36,45 @@ require("./routing/html")(app);
     });
 
 } */
+//Routes
 
-/* app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
-  });
+
 
 app.get('/notes', function (req, res) {
-    res.sendFile(path.join(__dirname, "/public/notes.html"));
+  res.sendFile(path.join(__dirname, "/public/notes.html"));
+});
+
+app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, "/public/index.html"));
   });
+  
+app.get('/api/notes', function(req, res){
+  res.sendFile(path.join(__dirname, "db/db.json"));
+});
+
+//var NotesSave = JSON.parse(fs.readFileSync("db/db.json", "utf-8"));
+
+app.get('/api/notes/:id', function(req, res){
+  let NotesSave = JSON.parse(fs.readFileSync("db/db.json", "utf-8"));
+  res.json(NotesSave[Number(req.params.id)]);
+});
+
+app.post('/api/notes', function(req, res){
+  let NotesSave = JSON.parse(fs.readFileSync("db/db.json", "utf-8"));
+  var newNote = req.body;
+  
+
+  NotesSave.push(newNote);
+  fs.writeFileSync("db/db.json", JSON.stringify(NotesSave));
+  res.json(NotesSave);
+
+});
 
 
 
-*/
+
+
+
 app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
 });
