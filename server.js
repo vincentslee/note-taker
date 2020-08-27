@@ -44,22 +44,21 @@ app.get('/notes', function (req, res) {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
-app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, "/public/index.html"));
   });
   
-app.get('/api/notes', function(req, res){
-  res.sendFile(path.join(__dirname, "db/db.json"));
-});
 
 //var NotesSave = JSON.parse(fs.readFileSync("db/db.json", "utf-8"));
 
-app.get('/api/notes/:id', function(req, res){
+app.get('/api/notes/', function(req, res){
   let NotesSave = JSON.parse(fs.readFileSync("db/db.json", "utf-8"));
-  res.json(NotesSave[Number(req.params.id)]);
+  console.log("initialized");
+  //console.log(NotesSave);
+  res.json(NotesSave);
 });
 
-app.post('/api/notes', function(req, res){
+app.post('/api/notes/', function(req, res){
   let NotesSave = JSON.parse(fs.readFileSync("db/db.json", "utf-8"));
   var newNote = req.body;
   
